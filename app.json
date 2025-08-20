@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Marketplace",
+    "slug": "marketplace-hybrid",
+    "scheme": "marketplace",
+    "version": "2.2.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f172a"
+    },
+    "backgroundColor": "#0f172a",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.eventiefiere.marketplace"
+    },
+    "android": {
+      "package": "com.eventiefiere.marketplace",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0f172a"
+      }
+    }
+  }
+}
