@@ -1,38 +1,36 @@
 {
   "expo": {
     "name": "Marketplace",
-    "slug": "marketplace-hybrid",
-    "scheme": "marketplace",
-    "version": "2.2.0",
+    "slug": "marketplace-app",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0f172a"
+      "backgroundColor": "#FFFFFF"
     },
-    "backgroundColor": "#0f172a",
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "platforms": ["ios", "android"],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.eventiefiere.marketplace"
     },
     "android": {
       "package": "com.eventiefiere.marketplace",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0f172a"
+        "backgroundColor": "#FFFFFF"
       }
     },
     "extra": {
       "eas": {
-        "projectId": "0c8bcc09-18f4-4ae9-9927-d05379a80e6d"
+        "projectId": "48f9b60c-9242-4107-89e5-0559fcedd37a"
       }
-    }
+    },
+    "owner": "marketplace123"
   }
 }
+
+ 
