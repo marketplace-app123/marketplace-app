@@ -1,5 +1,6 @@
 {
   "cli": { "version": ">= 10.0.0" },
+  "projectId : 48f9b60c-9242-4107-89e5-0559fcedd37a",
   "build": {
     "preview": { "android": { "buildType": "apk" } },
     "production": { "android": { "buildType": "app-bundle" } }
