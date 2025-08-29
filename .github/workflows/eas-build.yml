@@ -1,0 +1,32 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+      - name: Unzip app source
+        run: |
+          unzip evf-marketplace-app.zip -d tmp_app
+          mv tmp_app/evf-marketplace-app/* .
+          rm -rf tmp_app
+      - name: Install dependencies
+        run: npm install
+      - name: Build APK with EAS
+        env:
+          EAS_ACCESS_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
+        run: |
+          eas build --platform android --profile production --non-interactive --local --output ./app-release.apk || eas build --platform android --profile production --non-interactive --output ./app-release.apk
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: evf-app-apk
+          path: app-release.apk
