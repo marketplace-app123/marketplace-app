@@ -1,4 +1,4 @@
-nam:e: Build APK V2
+na:e: Build APK V2
 on:
   workflow_dispatch:
 jobs:
