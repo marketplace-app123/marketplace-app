@@ -1,7 +1,7 @@
-// config.js
-export const API_BASE_URL = "https://marketplace.eventiefiere.com/wp-json/wc/v3/";
+export const API_BASE_URL = "https://marketplace.eventiefiere.com/wp-json/wc/v3";
 
 export const API_KEYS = {
-  consumerKey: "ck_32763ad1201a1d7124556e87265b677a1206e74d",
-  consumerSecret: "cs_73eed827a9755866224af323cd6670e1e9076cde"
+  consumerKey: "ck_34355d9bdef0c511ff37467233658fb0c1fd7293",
+  consumerSecret: "cs_37ead00d22185f0beb7910dd00831df0818f1337"
 };
+
