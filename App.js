@@ -7,34 +7,34 @@ export default function App() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
 
-  // Callback when a category is selected
+  // Gestisce la selezione della categoria
   const handleSelectCategory = (id) => {
     setSelectedCategoryId(id);
     setSelectedProductId(null);
   };
 
-  // Callback when a product is selected
+  // Gestisce la selezione del prodotto
   const handleSelectProduct = (id) => {
     setSelectedProductId(id);
   };
 
-  // Return to category list
+  // Torna alla lista categorie
   const handleBackToCategories = () => {
     setSelectedCategoryId(null);
     setSelectedProductId(null);
   };
 
-  // Return to product list
+  // Torna alla lista prodotti
   const handleBackToProducts = () => {
     setSelectedProductId(null);
   };
 
-  // Show categories until a category is selected
+  // Nessuna categoria selezionata: mostra HomeScreen
   if (selectedCategoryId === null) {
     return <HomeScreen onSelectCategory={handleSelectCategory} />;
-  
+  }
 
-  // Show products list until a product is selected
+  // Categoria selezionata ma nessun prodotto: mostra ProductsScreen
   if (selectedProductId === null) {
     return (
       <ProductsScreen
@@ -45,7 +45,7 @@ export default function App() {
     );
   }
 
-  // Show product detail
+  // Prodotto selezionato: mostra il dettaglio
   return (
     <ProductDetailScreen
       productId={selectedProductId}
@@ -53,4 +53,3 @@ export default function App() {
     />
   );
 }
-
