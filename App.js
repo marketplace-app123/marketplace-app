@@ -32,7 +32,7 @@ export default function App() {
   // Show categories until a category is selected
   if (selectedCategoryId === null) {
     return <HomeScreen onSelectCategory={handleSelectCategory} />;
-  }
+  
 
   // Show products list until a product is selected
   if (selectedProductId === null) {
@@ -53,4 +53,4 @@ export default function App() {
     />
   );
 }
-https://github.com/marketplace-app123/marketplace-app
+
