@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Image } from "react-native";
-import api from "./woocommerce";
+import { getCategories } from "./marketplace";
 
 export default function HomeScreen() {
+
   const [categories, setCategories] = useState([]);
+
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     async function loadCategories() {
-      try {
-        const res = await api.get("products/categories", { per_page: 30 });
-        const data = res.data || res;
+const data = await getCategories({ per_page: 30 });
+
         const topCategories = data.filter((c) => c.parent === 0);
         setCategories(topCategories);
       } catch (e) {
