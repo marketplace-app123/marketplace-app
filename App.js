@@ -1,87 +1,56 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
-import axios from "axios";
-import { API_KEYS } from "./config"; // Consumer Key & Secret che hai messo in config.js
-
-const API_BASE_URL = "https://marketplace.eventiefiere.com/wp-json/wc/v3";
+import React, { useState } from "react";
+import HomeScreen from "./src/HomeScreen";
+import ProductsScreen from "./src/ProductsScreen";
+import ProductDetailScreen from "./src/ProductDetailScreen";
 
 export default function App() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/products`, {
-          auth: {
-            username: API_KEYS.consumerKey, // ck_...
-            password: API_KEYS.consumerSecret // cs_...
-          }
-        });
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Errore nel recupero prodotti:", error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Callback when a category is selected
+  const handleSelectCategory = (id) => {
+    setSelectedCategoryId(id);
+    setSelectedProductId(null);
+  };
 
-    fetchProducts();
-  }, []);
+  // Callback when a product is selected
+  const handleSelectProduct = (id) => {
+    setSelectedProductId(id);
+  };
 
-  if (loading) {
+  // Return to category list
+  const handleBackToCategories = () => {
+    setSelectedCategoryId(null);
+    setSelectedProductId(null);
+  };
+
+  // Return to product list
+  const handleBackToProducts = () => {
+    setSelectedProductId(null);
+  };
+
+  // Show categories until a category is selected
+  if (selectedCategoryId === null) {
+    return <HomeScreen onSelectCategory={handleSelectCategory} />;
+  }
+
+  // Show products list until a product is selected
+  if (selectedProductId === null) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Caricamento prodotti...</Text>
-      </View>
+      <ProductsScreen
+        categoryId={selectedCategoryId}
+        onProductSelect={handleSelectProduct}
+        onBack={handleBackToCategories}
+      />
     );
   }
 
+  // Show product detail
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Prodotti dal Marketplace</Text>
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.productCard}>
-            <Text style={styles.productName}>{item.name}</Text>
-            <Text style={styles.productPrice}>{item.price} €</Text>
-          </View>
-        )}
-      />
-    </View>
+    <ProductDetailScreen
+      productId={selectedProductId}
+      onBack={handleBackToProducts}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  productCard: {
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 8,
-    backgroundColor: "#f8f8f8",
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
-  productName: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  productPrice: {
-    fontSize: 16,
-    color: "green",
-    marginTop: 5,
-  },
-});
-
-
+https://github.com/marketplace-app123/marketplace-app
