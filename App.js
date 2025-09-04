@@ -1,54 +1,40 @@
 import React, { useState } from "react";
 import HomeScreen from "./src/HomeScreen";
 import ProductsScreen from "./src/ProductsScreen";
-import ProductDetailScreen from "./src/ProductDetailScreen";
+import ProductDetailsScreen from "./src/ProductDetailsScreen";
 
 export default function App() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
 
+  // Quando l'utente seleziona una categoria
   const handleSelectCategory = (id) => {
     setSelectedCategoryId(id);
     setSelectedProductId(null);
   };
 
-<<<<<<< HEAD
-=======
-  // Gestisce la selezione del prodotto
->>>>>>> 63bdeb44 (Fix App.js)
+  // Quando l'utente seleziona un prodotto
   const handleSelectProduct = (id) => {
     setSelectedProductId(id);
   };
 
-<<<<<<< HEAD
-=======
-  // Torna alla lista categorie
->>>>>>> 63bdeb44 (Fix App.js)
+  // Torna alla lista delle categorie
   const handleBackToCategories = () => {
     setSelectedCategoryId(null);
     setSelectedProductId(null);
   };
 
-<<<<<<< HEAD
-=======
-  // Torna alla lista prodotti
->>>>>>> 63bdeb44 (Fix App.js)
+  // Torna alla lista dei prodotti
   const handleBackToProducts = () => {
     setSelectedProductId(null);
   };
 
-<<<<<<< HEAD
-=======
-  // Nessuna categoria selezionata: mostra HomeScreen
->>>>>>> 63bdeb44 (Fix App.js)
+  // Se non c'è una categoria selezionata → mostra la home
   if (selectedCategoryId === null) {
     return <HomeScreen onSelectCategory={handleSelectCategory} />;
   }
 
-<<<<<<< HEAD
-=======
-  // Categoria selezionata ma nessun prodotto: mostra ProductsScreen
->>>>>>> 63bdeb44 (Fix App.js)
+  // Se c’è una categoria ma nessun prodotto selezionato → mostra lista prodotti
   if (selectedProductId === null) {
     return (
       <ProductsScreen
@@ -59,19 +45,11 @@ export default function App() {
     );
   }
 
-  // Prodotto selezionato: mostra il dettaglio
+  // Se un prodotto è selezionato → mostra i dettagli del prodotto
   return (
-    <ProductDetailScreen
+    <ProductDetailsScreen
       productId={selectedProductId}
       onBack={handleBackToProducts}
     />
   );
 }
-<<<<<<< HEAD
-=======
-
-
-
-
-
->>>>>>> 63bdeb44 (Fix App.js)
