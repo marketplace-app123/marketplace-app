@@ -7,13 +7,13 @@ export default function App() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
 
-  // Quando l'utente seleziona una categoria
+  // Seleziona una categoria
   const handleSelectCategory = (id) => {
     setSelectedCategoryId(id);
     setSelectedProductId(null);
   };
 
-  // Quando l'utente seleziona un prodotto
+  // Seleziona un prodotto
   const handleSelectProduct = (id) => {
     setSelectedProductId(id);
   };
@@ -29,12 +29,12 @@ export default function App() {
     setSelectedProductId(null);
   };
 
-  // Se non c'è una categoria selezionata → mostra la home
+  // Nessuna categoria selezionata → mostra Home
   if (selectedCategoryId === null) {
     return <HomeScreen onSelectCategory={handleSelectCategory} />;
   }
 
-  // Se c’è una categoria ma nessun prodotto selezionato → mostra lista prodotti
+  // Categoria selezionata ma nessun prodotto → mostra lista prodotti
   if (selectedProductId === null) {
     return (
       <ProductsScreen
@@ -45,7 +45,7 @@ export default function App() {
     );
   }
 
-  // Se un prodotto è selezionato → mostra i dettagli del prodotto
+  // Prodotto selezionato → mostra dettaglio
   return (
     <ProductDetailsScreen
       productId={selectedProductId}
