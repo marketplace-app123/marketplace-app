@@ -1,85 +1,79 @@
+// src/HomeScreen.js
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Image } from "react-native";
-import { getCategories } from "./marketplace";
+import { View, Text, ActivityIndicator, TouchableOpacity, FlatList } from "react-native";
+import { fetchRootCategories } from "../api";
 
 export default function HomeScreen({ onSelectCategory }) {
-  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    async function loadCategories() {
+    (async () => {
       try {
-        const data = await getCategories({ per_page: 30 });
-        // filter top-level categories (parent equals 0)
-        const topCategories = data.filter((c) => c.parent === 0);
-        setCategories(topCategories);
+        setError("");
+        const data = await fetchRootCategories();
+        setCategories(data);
       } catch (e) {
-        setError(e.message || "Errore nel recupero categorie");
+        const msg = e.response?.status
+          ? `Errore: ${e.response.status}`
+          : "Errore di rete";
+        setError(msg);
       } finally {
         setLoading(false);
       }
-    }
-    loadCategories();
+    })();
   }, []);
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 24 }}>
-        <ActivityIndicator />
-        <Text style={{ marginTop: 8 }}>Caricamento categorie...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 24 }}>
-        <Text style={{ color: "red" }}>{error}</Text>
-      </View>
-    );
-  }
-
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => onSelectCategory && onSelectCategory(item.id)}
-      style={{
-        flex: 1,
-        alignItems: "center",
-        padding: 12,
-        borderRadius: 16,
-        borderWidth: 1,
-        borderColor: "#eee",
-        margin: 4,
-      }}
-    >
-      <Image
-        source={{ uri: item?.image?.src || "https://via.placeholder.com/128" }}
-        style={{ width: 64, height: 64, borderRadius: 12 }}
-        resizeMode="cover"
-      />
-      <Text
-        numberOfLines={2}
-        style={{ marginTop: 8, textAlign: "center", fontWeight: "600" }}
-      >
-        {item.name}
-      </Text>
-    </TouchableOpacity>
-  );
+  if (loading) return <Loading title="Carico categorie..." />;
+  if (error) return <ErrorView title="Categorie" message={error} />;
 
   return (
-    <FlatList
-      data={categories}
-      keyExtractor={(item) => String(item.id)}
-      numColumns={3}
-      contentContainerStyle={{ padding: 16 }}
-      columnWrapperStyle={{ gap: 12 }}
-      renderItem={renderItem}
-      ListEmptyComponent={
-        <View style={{ padding: 16 }}>
-          <Text>Nessuna categoria disponibile.</Text>
-        </View>
-      }
-    />
+    <View style={{ flex: 1, padding: 16 }}>
+      <Text style={{ fontSize: 26, fontWeight: "700", marginBottom: 12 }}>Categorie</Text>
+      <FlatList
+        data={categories}
+        keyExtractor={(item) => String(item.id)}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => onSelectCategory(item)}
+            style={{
+              backgroundColor: "#1976D2",
+              padding: 14,
+              borderRadius: 10,
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
+              {item.name} {typeof item.count === "number" ? `(${item.count})` : ""}
+            </Text>
+            {item.slug ? (
+              <Text style={{ color: "white", opacity: 0.8, marginTop: 4 }}>
+                slug: {item.slug}
+              </Text>
+            ) : null}
+          </TouchableOpacity>
+        )}
+      />
+    </View>
   );
 }
+
+function Loading({ title }) {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <ActivityIndicator size="large" />
+      <Text style={{ marginTop: 12 }}>{title}</Text>
+    </View>
+  );
+}
+
+function ErrorView({ title, message }) {
+  return (
+    <View style={{ flex: 1, padding: 16 }}>
+      <Text style={{ fontSize: 26, fontWeight: "700", marginBottom: 8 }}>{title}</Text>
+      <Text style={{ color: "#B71C1C" }}>{message}</Text>
+    </View>
+  );
+}
+

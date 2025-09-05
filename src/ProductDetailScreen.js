@@ -1,81 +1,79 @@
+// src/ProductDetailsScreen.js
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
-import { getProduct } from "./marketplace";
+import { View, Text, ActivityIndicator, TouchableOpacity, Image, ScrollView } from "react-native";
+import { fetchProduct } from "../api";
 
-export default function ProductDetailScreen({ productId, onBack }) {
-  const [product, setProduct] = useState(null);
+export default function ProductDetailsScreen({ productId, onBack }) {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
+  const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    const loadProduct = async () => {
+    (async () => {
       try {
-        setLoading(true);
-        const data = await getProduct(productId);
+        setError("");
+        const data = await fetchProduct(productId);
         setProduct(data);
       } catch (e) {
-        setError(e.message || "Errore nel recupero del prodotto");
+        const msg = e?.response?.status ? `Errore: ${e.response.status}` : "Errore di rete";
+        setError(msg);
       } finally {
         setLoading(false);
       }
-    };
-    loadProduct();
+    })();
   }, [productId]);
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator />
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size="large" />
+        <Text style={{ marginTop: 12 }}>Carico prodotto...</Text>
       </View>
     );
   }
-
-  if (error || !product) {
-    return (
-      <View style={styles.center}>
-        <Text style={{ color: "red" }}>{error || "Prodotto non trovato."}</Text>
-        <TouchableOpacity onPress={onBack}>
-          <Text style={{ marginTop: 12, color: "blue" }}>Indietro</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  const { images, name, description, price, vendor } = product;
-  const cleanDescription = description ? description.replace(/<[^>]+>/g, "") : "";
 
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <TouchableOpacity onPress={onBack} style={{ padding: 16 }}>
-        <Text style={{ color: "blue" }}>← Torna ai prodotti</Text>
+    <View style={{ flex: 1, padding: 16 }}>
+      <TouchableOpacity onPress={onBack}>
+        <Text style={{ color: "#1976D2", marginBottom: 12 }}>← Torna indietro</Text>
       </TouchableOpacity>
-      {images && images.length > 0 && (
-        <Image source={{ uri: images[0] }} style={{ width: "100%", height: 250 }} resizeMode="cover" />
+
+      {error ? (
+        <Text style={{ color: "#B71C1C" }}>{error}</Text>
+      ) : product ? (
+        <ScrollView>
+          {product.images?.[0]?.src ? (
+            <Image
+              source={{ uri: product.images[0].src }}
+              style={{ width: "100%", height: 220, borderRadius: 12, marginBottom: 12, backgroundColor: "#EEE" }}
+              resizeMode="cover"
+            />
+          ) : null}
+
+          <Text style={{ fontSize: 22, fontWeight: "700" }}>{product.name}</Text>
+
+          {product.price ? (
+            <Text style={{ fontSize: 18, marginTop: 6 }}>
+              {Number(product.price).toFixed(2)} €
+            </Text>
+          ) : null}
+
+          {product.short_description ? (
+            <Text style={{ marginTop: 12 }}>{stripHtml(product.short_description)}</Text>
+          ) : null}
+
+          {product.description ? (
+            <Text style={{ marginTop: 12, opacity: 0.8 }}>{stripHtml(product.description)}</Text>
+          ) : null}
+        </ScrollView>
+      ) : (
+        <Text>Nessun dato prodotto.</Text>
       )}
-      <View style={{ padding: 16 }}>
-        <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 8 }}>{name}</Text>
-        <Text style={{ fontSize: 18, marginBottom: 12 }}>{price} €</Text>
-        <Text style={{ marginBottom: 16 }}>{cleanDescription}</Text>
-        {vendor && (
-          <View style={{ marginTop: 12 }}>
-            <Text style={{ fontWeight: "600" }}>Venditore: {vendor.store_name}</Text>
-            {vendor.address && (
-              <Text>
-                {vendor.address.city}, {vendor.address.state} {vendor.address.country}
-              </Text>
-            )}
-          </View>
-        )}
-      </View>
-    </ScrollView>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-  },
-});
+function stripHtml(html) {
+  return String(html || "").replace(/<[^>]+>/g, "").trim();
+}
+
