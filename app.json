@@ -1,36 +1,25 @@
 {
   "expo": {
-    "name": "Marketplace",
-    "slug": "marketplace-app",
+    "name": "Eventi e Fiere",
+    "slug": "vetrina-4-pulsanti-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FFFFFF"
+      "backgroundColor": "#ffffff"
     },
-    "platforms": ["ios", "android"],
+    "updates": {
+      "enabled": false
+    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "com.eventiefiere.marketplace"
+      "supportsTablet": false
     },
     "android": {
-      "package": "com.eventiefiere.marketplace",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
-    "extra": {
-      "eas": {
-        "projectId": "48f9b60c-9242-4107-89e5-0559fcedd37a"
-      }
-    },
-    "owner": "marketplace123"
+      "package": "com.eventiefiere.vetrinaapp",
+      "versionCode": 1
+    }
   }
 }
-
- 
